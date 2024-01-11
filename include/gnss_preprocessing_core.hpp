@@ -15,6 +15,7 @@
 #include <Eigen/Geometry>
 #include <Eigen/Dense>
 #include <cmath>
+#include <iomanip>
 
 using namespace std;
 
@@ -68,6 +69,7 @@ class GnssPreprocessingCore
         // different version convert (lat, lon, alt) to (x, y, z)
         int blh2enu(double lat0, double lon0, double lat, double lon, double *x, double *y);
         double constrain(double val, double min, double max);
+        
 };
 
 /***********************************************************************
@@ -77,7 +79,7 @@ class GnssPreprocessingCore
 GnssPreprocessingCore::GnssPreprocessingCore(double lat, double lon, double hig)
 {
     std::cout << "GnssPreprocessingCore Start!" << std::endl;
-    
+    cout << fixed << setprecision(15) << lat << endl;
     // init local variable
     //nh = n;
 
@@ -90,7 +92,7 @@ GnssPreprocessingCore::GnssPreprocessingCore(double lat, double lon, double hig)
     gnss_path_pub = nh.advertise<nav_msgs::Path>("/gnss_path", 10);
 
     // Subscriber
-    gnss_sub = nh.subscribe("/fix", 10, &GnssPreprocessingCore::gnssCallback, this);
+    gnss_sub = nh.subscribe("/ublox/fix", 10, &GnssPreprocessingCore::gnssCallback, this);
 
     // init gnss_path
     gnss_path.header.frame_id = "map";
@@ -146,7 +148,8 @@ void GnssPreprocessingCore::gnssCallback(const sensor_msgs::NavSatFixConstPtr& g
     point.pose.orientation.x = 0;
     point.pose.orientation.y = 0;
     point.pose.orientation.z = 1.0;
-    
+    std::cout << enu[1] << std::endl;
+    std::cout << enu[0] << std::endl;
     gnss_path.poses.push_back(point);
     gnss_pose_pub.publish(point);
     gnss_path_pub.publish(gnss_path);
@@ -260,7 +263,7 @@ double GnssPreprocessingCore::rad2deg(double rad) {
 int GnssPreprocessingCore::blh2enu(double lat0, double lon0, double lat, double lon, double *x, double *y)
 {
     static constexpr double CONSTANTS_RADIUS_OF_EARTH = 6371000; //[m]
-
+    cout << fixed << setprecision(15) << lat << endl;
     const double lat0_rad = lat0 * (M_PI / 180.0);
     const double lon0_rad = lon0 * (M_PI / 180.0);
     const double lat_rad = lat * (M_PI / 180.0);

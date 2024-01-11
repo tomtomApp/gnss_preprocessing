@@ -1,13 +1,16 @@
 <launch>
     <!-- tf satic -->
     <node pkg="tf" type="static_transform_publisher" name="map_to_odom" args="0 0 0 0 0 0 map odom 100" />
-    <node pkg="tf" type="static_transform_publisher" name="baselink_to_navsat" args="0 0 0 0 0 0 base_link navsat 100" />
+    <!-- <node pkg="tf" type="static_transform_publisher" name="baselink_to_navsat" args="0 0 0 0 0 0 base_link navsat 100" /> -->
+    <node pkg="tf" type="static_transform_publisher" name="baselink_to_navsat" args="0 0 0 0 0 0 base_link gps 100" />
     <!--/nmea_sentence(nmea_msgs/Sentence) convert to  /fix(sensor_msgs/NavSatFix)-->
     <node pkg="nmea_navsat_driver" type="nmea_topic_driver" name="nmea_topic_driver" output="screen"/>
     <!--/fix(sensor_msgs/NavSatFix) convert to /gps_path(nav_msgs/Path)-->
     <node pkg="gnss_preprocessing" name="gnss_preprocessing" type="gnss_preprocessing" output="screen"/>
+    <!--save gnss data to csv-->
+    <node pkg="gnss_imu_odom_eskf" name="save_gnss_path" type="save_gnss_path.py" output="screen"/> 
     <!--rosbag play-->
-    <node pkg="rosbag" type="play" name="player" output="screen" args="--clock /home/ramune/Downloads/utbm_robocar_dataset_20190131_noimage.bag"/>
+    <node pkg="rosbag" type="play" name="player" output="screen" args="--clock /home/tom/Documents/bag/test.bag"/>
     <!--display rviz-->
     <node name="rviz" pkg="rviz" type="rviz" args="-d $(find gnss_preprocessing)/rviz/gnss_preprocessing.rviz" required="true"/>
 </launch>

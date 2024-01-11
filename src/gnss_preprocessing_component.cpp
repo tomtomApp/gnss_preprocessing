@@ -37,7 +37,8 @@ GnssPreprocessingComponent::GnssPreprocessingComponent(double lat, double lon, d
     gnss_path_pub = nh.advertise<nav_msgs::Path>("/gnss_path", 10);
 
     // Subscriber
-    gnss_sub = nh.subscribe("/fix", 10, &GnssPreprocessingComponent::gnssCallback, this);
+    //gnss_sub = nh.subscribe("/fix", 10, &GnssPreprocessingComponent::gnssCallback, this);
+    gnss_sub = nh.subscribe("/ublox/fix", 10, &GnssPreprocessingComponent::gnssCallback, this);
 
     // init gnss_path
     gnss_path.header.frame_id = "map";

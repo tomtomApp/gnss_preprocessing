@@ -9,8 +9,10 @@ int main(int argc, char**argv)
 
     // for utbm_robocar_dataset_20190131_noimage.bag
     // Init gps position(latitude, longitude)
-    double lat0 = 47.5115140833;
-    double lon0 = 6.79310693333;
+    //double lat0 = 36.0828625;
+    double lat0 = 35.6944632;
+    //double lon0 = 140.0769904;
+    double lon0 = 139.4537385;
     double hig0 = 0.0;
 
     //GnssPreprocessingCore gnss_preprocessing_core(n, lat0, lon0, hig0);
